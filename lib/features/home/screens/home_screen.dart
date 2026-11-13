@@ -1,4 +1,6 @@
-﻿import 'dart:async';
+import '../../player/screens/player_detail_screen.dart';
+
+import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +18,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final TextEditingController _searchController =
-      TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   Timer? _debounce;
 
@@ -26,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Jude Bellingham',
     'Harry Kane',
     'Zinedine Zidane',
-    'Pelé',
+    'PelÃ©',
   ];
 
   @override
@@ -43,14 +44,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void _search(String value) {
     _debounce?.cancel();
 
-    _debounce = Timer(
-      const Duration(milliseconds: 600),
-      () {
-        if (mounted) {
-          context.read<PlayerProvider>().searchPlayers(value);
-        }
-      },
-    );
+    _debounce = Timer(const Duration(milliseconds: 600), () {
+      if (mounted) {
+        context.read<PlayerProvider>().searchPlayers(value);
+      }
+    });
   }
 
   void _selectSuggestion(String name) {
@@ -117,15 +115,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const SliverFillRemaining(
                     hasScrollBody: false,
                     child: Center(
-                      child: CircularProgressIndicator(
-                        color: AppTheme.primary,
-                      ),
+                      child: CircularProgressIndicator(color: AppTheme.primary),
                     ),
                   );
                 }
 
-                if (provider.errorMessage != null &&
-                    provider.players.isEmpty) {
+                if (provider.errorMessage != null && provider.players.isEmpty) {
                   return SliverFillRemaining(
                     hasScrollBody: false,
                     child: _buildEmptyState(
@@ -157,21 +152,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       final columns = width >= 750 ? 3 : 2;
 
                       return SliverGrid(
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: columns,
                           crossAxisSpacing: 14,
                           mainAxisSpacing: 14,
                           childAspectRatio: 0.78,
                         ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final player = provider.players[index];
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final player = provider.players[index];
 
-                            return _buildPlayerCard(player);
-                          },
-                          childCount: provider.players.length,
-                        ),
+                          return _buildPlayerCard(player);
+                        }, childCount: provider.players.length),
                       );
                     },
                   ),
@@ -179,9 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
 
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 35),
-            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 35)),
           ],
         ),
       ),
@@ -197,9 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
           decoration: BoxDecoration(
             color: AppTheme.surface,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: AppTheme.primary.withValues(alpha: 0.4),
-            ),
+            border: Border.all(color: AppTheme.primary.withValues(alpha: 0.4)),
           ),
           child: const Icon(
             Icons.sports_soccer,
@@ -244,9 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: IconButton(
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Settings coming soon.'),
-                ),
+                const SnackBar(content: Text('Settings coming soon.')),
               );
             },
             icon: const Icon(
@@ -309,25 +294,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
         context.read<PlayerProvider>().searchPlayers(value);
       },
-      style: const TextStyle(
-        color: AppTheme.textPrimary,
-        fontSize: 14,
-      ),
+      style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
       decoration: InputDecoration(
         hintText: 'Search football players...',
-        prefixIcon: const Icon(
-          Icons.search,
-          color: AppTheme.primary,
-        ),
+        prefixIcon: const Icon(Icons.search, color: AppTheme.primary),
         suffixIcon: IconButton(
           onPressed: () {
             _searchController.clear();
             _debounce?.cancel();
 
             context.read<PlayerProvider>().clearSearch();
-            context.read<PlayerProvider>().loadSavedPlayers(
-              refresh: true,
-            );
+            context.read<PlayerProvider>().loadSavedPlayers(refresh: true);
           },
           icon: const Icon(Icons.close),
         ),
@@ -335,10 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildSectionTitle(
-    String title,
-    String subtitle,
-  ) {
+  Widget _buildSectionTitle(String title, String subtitle) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -356,10 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
         Text(
           subtitle,
-          style: const TextStyle(
-            fontSize: 12,
-            color: AppTheme.textSecondary,
-          ),
+          style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary),
         ),
       ],
     );
@@ -374,23 +345,15 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: () => _selectSuggestion(name),
           borderRadius: BorderRadius.circular(20),
           child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 10,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               color: AppTheme.surface,
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: AppTheme.surfaceLight,
-              ),
+              border: Border.all(color: AppTheme.surfaceLight),
             ),
             child: Text(
               name,
-              style: const TextStyle(
-                fontSize: 12,
-                color: AppTheme.textPrimary,
-              ),
+              style: const TextStyle(fontSize: 12, color: AppTheme.textPrimary),
             ),
           ),
         );
@@ -399,139 +362,130 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildPlayerCard(Player player) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppTheme.surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppTheme.surfaceLight,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlayerDetailScreen(playerId: player.id),
+          ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppTheme.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppTheme.surfaceLight),
         ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
-              child: Container(
-                width: double.infinity,
-                color: AppTheme.surfaceLight,
-                child: player.thumbnailUrl != null
-                    ? CachedNetworkImage(
-                        imageUrl: player.thumbnailUrl!,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) {
-                          return const Center(
-                            child: CircularProgressIndicator(
-                              color: AppTheme.primary,
-                              strokeWidth: 2,
-                            ),
-                          );
-                        },
-                        errorWidget: (context, url, error) {
-                          return const Icon(
-                            Icons.person,
-                            size: 65,
-                            color: AppTheme.textSecondary,
-                          );
-                        },
-                      )
-                    : const Icon(
-                        Icons.person,
-                        size: 65,
-                        color: AppTheme.textSecondary,
-                      ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
+                child: Container(
+                  width: double.infinity,
+                  color: AppTheme.surfaceLight,
+                  child: player.thumbnailUrl != null
+                      ? CachedNetworkImage(
+                          imageUrl: player.thumbnailUrl!,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) {
+                            return const Center(
+                              child: CircularProgressIndicator(
+                                color: AppTheme.primary,
+                                strokeWidth: 2,
+                              ),
+                            );
+                          },
+                          errorWidget: (context, url, error) {
+                            return const Icon(
+                              Icons.person,
+                              size: 65,
+                              color: AppTheme.textSecondary,
+                            );
+                          },
+                        )
+                      : const Icon(
+                          Icons.person,
+                          size: 65,
+                          color: AppTheme.textSecondary,
+                        ),
+                ),
               ),
             ),
-          ),
-
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  player.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w700,
-                    color: AppTheme.textPrimary,
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    player.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppTheme.textPrimary,
+                    ),
                   ),
-                ),
-
-                const SizedBox(height: 5),
-
-                Text(
-                  player.team ?? 'Club unavailable',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    color: AppTheme.primary,
+                  const SizedBox(height: 5),
+                  Text(
+                    player.team ?? 'Club unavailable',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 11,
+                      color: AppTheme.primary,
+                    ),
                   ),
-                ),
-
-                const SizedBox(height: 4),
-
-                Text(
-                  player.position ?? 'Position unavailable',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 10,
-                    color: AppTheme.textSecondary,
+                  const SizedBox(height: 4),
+                  Text(
+                    player.position ?? 'Position unavailable',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: AppTheme.textSecondary,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildEmptyState(
-    IconData icon,
-    String title,
-    String message,
-  ) {
+  Widget _buildEmptyState(IconData icon, String title, String message) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 35),
+        padding: const EdgeInsets.all(30),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 58,
-              color: AppTheme.primary,
-            ),
-
-            const SizedBox(height: 18),
-
+            Icon(icon, size: 65, color: AppTheme.primary),
+            const SizedBox(height: 20),
             Text(
               title,
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
                 color: AppTheme.textPrimary,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
             ),
-
-            const SizedBox(height: 9),
-
+            const SizedBox(height: 10),
             Text(
               message,
               textAlign: TextAlign.center,
               style: const TextStyle(
+                color: AppTheme.textSecondary,
                 fontSize: 13,
                 height: 1.5,
-                color: AppTheme.textSecondary,
               ),
             ),
           ],
